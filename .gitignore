@@ -9,3 +9,7 @@ venv/
 dist/
 build/
 *.egg-info/
+.stepit_cache
+.new_stepit_cache_dir
+.custom_stepit_cache
+.coverage
