@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.4 (2025-02-17)
+
+### Bug Fixes
+
+- No way
+  ([`d4180b1`](https://github.com/edalfon/stepit/commit/d4180b139ba047b74e31cccf0e3919c17436632e))
+
+
 ## v0.1.3 (2025-02-17)
 
 ### Bug Fixes
