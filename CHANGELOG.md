@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.3.1 (2025-02-17)
+
+### Bug Fixes
+
+- No custom repository-url needed for pypi
+  ([`37475a8`](https://github.com/edalfon/stepit/commit/37475a86a57295d0abd4c0a7114cb9233b2aa464))
+
+
 ## v0.3.0 (2025-02-17)
 
 ### Features
