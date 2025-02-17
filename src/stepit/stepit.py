@@ -134,14 +134,7 @@ def _compute_recursive_hash(func, seen=None):
 
 def create_symlink(symlink_path, target_file):
     """Creates a symbolic link, handling cross-platform differences."""
-    try:
-        if os.path.exists(symlink_path) or os.path.islink(symlink_path):
-            os.remove(symlink_path)  # Remove old symlink if it exists
-
-        os.symlink(target_file, symlink_path)  # Create new symlink
-
-    except OSError:
-        shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
+    shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
 
 
 def stepit(
