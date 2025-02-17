@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.1.1 (2025-02-17)
+
+### Bug Fixes
+
+- Debug test
+  ([`07a46a0`](https://github.com/edalfon/stepit/commit/07a46a0f254ce6466bd291119dca5191384a2ce1))
+
+### Build System
+
+- Amend makefile
+  ([`90988fe`](https://github.com/edalfon/stepit/commit/90988febf0a6ddcc96bc949894b00073f7558825))
+
+
 ## v0.1.0 (2025-02-17)
 
 ### Build System
