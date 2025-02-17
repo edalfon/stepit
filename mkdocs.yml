@@ -1,0 +1,23 @@
+site_name: "stepit"
+
+theme:
+  name: "material"
+
+plugins:
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]  # search packages in the src folder
+        options:
+          show_submodules: true
+
+markdown_extensions:
+  - pymdownx.snippets:
+      base_path: !relative $config_dir
+
+nav:
+  - Home:
+    - Overview: index.md
+  - API reference:
+    - api.md

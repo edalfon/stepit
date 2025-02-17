@@ -1,0 +1,26 @@
+name: build-and-deploy-docs
+on:
+  push:
+    branches:
+      - main  
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+        shell: bash
+      - run: uv pip install -e .
+        shell: bash
+      - run: uv run mkdocs build
+        shell: bash
+      - name: Deploy to Github Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages          
+          folder: site
+          

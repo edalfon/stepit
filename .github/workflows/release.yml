@@ -1,0 +1,49 @@
+name: release
+on:
+  push:
+    branches:
+      - main  # Runs when new commits are pushed to main
+
+jobs:
+  testpypi-publish:
+    name: Upload release to Test PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/stepit
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+
+    - name: Setup | Checkout Repository at workflow sha
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.sha }}
+
+    - name: Setup | Force correct release branch on workflow sha
+      run: |
+        git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+
+    - name: Action | Semantic Version Release
+      id: release
+      uses: python-semantic-release/python-semantic-release@v9.19.1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        git_committer_name: "github-actions"
+        git_committer_email: "actions@users.noreply.github.com"
+        
+    - uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.5.14"
+    - run: uv build
+    # warning: `uv publish` is experimental and may change without warning
+    # - run: uv publish --trusted-publishing always --publish-url https://test.pypi.org/legacy/ --check-url https://test.pypi.org/simple/
+  
+    # https://github.com/pypa/gh-action-pypi-publish
+    - name: Publish package distributions to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+
