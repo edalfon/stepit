@@ -24,7 +24,9 @@ def test_stepit_defaults(caplog: pytest.LogCaptureFixture):
         default_deserialize(f"{cache_dir}/a")
 
     start_time = time.time()
+    print(f"Before running a(): {os.listdir(cache_dir)}")
     a(5)
+    print(f"After running a(): {os.listdir(cache_dir)}")
     elapsed_time = time.time() - start_time
     assert "Starting execution" in caplog.text
     assert "Successfully completed and cached" in caplog.text
