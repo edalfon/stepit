@@ -43,7 +43,9 @@ def default_deserialize(filename):
     """Deserialize using pickle."""
     print(f"Trying to read file: '{filename}'")
     print(f"And this is the ls of the dirname: {os.listdir(os.path.dirname(filename))}")
+    print(f"Explicitly checking the filename exists returns: {os.path.exists(filename)}")
     with open(filename, "rb") as f:
+        print("apparently open success")
         return pickle.load(f)
 
 
