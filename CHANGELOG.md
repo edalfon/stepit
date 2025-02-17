@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.2 (2025-02-17)
+
+### Bug Fixes
+
+- Barebones test
+  ([`d99a21a`](https://github.com/edalfon/stepit/commit/d99a21a8f9478f94eec9f930c53047d12280c34b))
+
+
 ## v0.1.1 (2025-02-17)
 
 ### Bug Fixes
