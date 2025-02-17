@@ -44,8 +44,12 @@ def default_deserialize(filename):
     print(f"Trying to read file: '{filename}'")
     print(f"And this is the ls of the dirname: {os.listdir(os.path.dirname(filename))}")
     print(f"Explicitly checking the filename exists returns: {os.path.exists(filename)}")
+    import pathlib
+    print(f"Is symlink: {pathlib.Path(filename).is_symlink()}")
+
+
     with open(filename, "rb") as f:
-        print("apparently open success")
+        print("apparently open")
         return pickle.load(f)
 
 
@@ -134,7 +138,14 @@ def _compute_recursive_hash(func, seen=None):
 
 def create_symlink(symlink_path, target_file):
     """Creates a symbolic link, handling cross-platform differences."""
-    shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
+    try:
+        if os.path.exists(symlink_path) or os.path.islink(symlink_path):
+            os.remove(symlink_path)  # Remove old symlink if it exists
+
+        os.symlink(target_file, symlink_path)  # Create new symlink
+
+    except OSError:
+        shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
 
 
 def stepit(
