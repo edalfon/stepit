@@ -36,12 +36,18 @@ logger.addHandler(handler)
 def default_serialize(result, filename):
     """Serialize using pickle."""
     os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+    print(f"Before saving: {os.listdir(os.path.dirname(filename))}")
+
     with open(filename, "wb") as f:
         pickle.dump(result, f)
+
+    print(f"After saving: {os.listdir(os.path.dirname(filename))}")
 
 
 def default_deserialize(filename):
     """Deserialize using pickle."""
+    print(f"Before reading: {os.listdir(os.path.dirname(filename))}")
     with open(filename, "rb") as f:
         return pickle.load(f)
 
