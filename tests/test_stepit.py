@@ -31,6 +31,8 @@ def test_stepit_defaults(caplog: pytest.LogCaptureFixture):
     assert "Starting execution" in caplog.text
     assert "Successfully completed and cached" in caplog.text
     assert elapsed_time >= 5
+    print(f"weird a(): {os.listdir(cache_dir)}")
     assert default_deserialize(f"{cache_dir}/a") == 7
+    print(f"after weird a(): {os.listdir(cache_dir)}")
     caplog.clear()
 
