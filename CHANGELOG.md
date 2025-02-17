@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.5 (2025-02-17)
+
+### Bug Fixes
+
+- Put tests back on
+  ([`e5bddfc`](https://github.com/edalfon/stepit/commit/e5bddfc00a4826f8e438589f31d38fd4e0438d5d))
+
+
 ## v0.1.4 (2025-02-17)
 
 ### Bug Fixes
