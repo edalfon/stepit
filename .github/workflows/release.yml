@@ -5,12 +5,12 @@ on:
       - main  # Runs when new commits are pushed to main
 
 jobs:
-  testpypi-publish:
-    name: Upload release to Test PyPI
+  pypi-publish:
+    name: Upload release to PyPI
     runs-on: ubuntu-latest
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/stepit
+      name: pypi
+      url: https://pypi.org/p/stepit
     permissions:
       id-token: write
       contents: write
@@ -38,12 +38,10 @@ jobs:
       with:
         version: "0.5.14"
     - run: uv build
-    # warning: `uv publish` is experimental and may change without warning
-    # - run: uv publish --trusted-publishing always --publish-url https://test.pypi.org/legacy/ --check-url https://test.pypi.org/simple/
   
     # https://github.com/pypa/gh-action-pypi-publish
-    - name: Publish package distributions to TestPyPI
+    - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        repository-url: https://test.pypi.org/legacy/
+        repository-url: https://pypi.org/legacy/
 
