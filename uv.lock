@@ -770,7 +770,7 @@ wheels = [
 
 [[package]]
 name = "stepit"
-version = "0.0.0"
+version = "0.1.4"
 source = { virtual = "." }
 
 [package.dev-dependencies]
