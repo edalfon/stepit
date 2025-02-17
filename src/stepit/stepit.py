@@ -47,6 +47,8 @@ def default_deserialize(filename):
     import pathlib
     print(f"Is symlink: {pathlib.Path(filename).is_symlink()}")
 
+    if pathlib.Path(filename).is_symlink():
+        filename = os.readlink(filename)
 
     with open(filename, "rb") as f:
         print("apparently open")
