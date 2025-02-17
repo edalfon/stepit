@@ -41,6 +41,8 @@ def default_serialize(result, filename):
 
 def default_deserialize(filename):
     """Deserialize using pickle."""
+    logger.debug(f"Trying to read file: '{filename}'")
+    logger.debug(f"And this is the ls of the dirname: {os.listdir(os.path.dirname(filename))}")
     with open(filename, "rb") as f:
         return pickle.load(f)
 
