@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.3.0 (2025-02-17)
+
+### Features
+
+- Proof of concept, yet, ready for pypi
+  ([`79014f1`](https://github.com/edalfon/stepit/commit/79014f111479644bfda712f9cda5c8dd1e64683c))
+
+
 ## v0.2.0 (2025-02-17)
 
 ### Bug Fixes
