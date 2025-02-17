@@ -6,6 +6,7 @@ import os
 import pickle
 import shutil
 import time
+import pathlib
 
 # Set up logging
 logger = logging.getLogger("stepit")
@@ -40,18 +41,11 @@ def default_serialize(result, filename):
         pickle.dump(result, f)
 
 def default_deserialize(filename):
-    """Deserialize using pickle."""
-    print(f"Trying to read file: '{filename}'")
-    print(f"And this is the ls of the dirname: {os.listdir(os.path.dirname(filename))}")
-    print(f"Explicitly checking the filename exists returns: {os.path.exists(filename)}")
-    import pathlib
-    print(f"Is symlink: {pathlib.Path(filename).is_symlink()}")
-
+    """Deserialize using pickle, considering that the file might be a symlink."""
     if pathlib.Path(filename).is_symlink():
         filename = os.readlink(filename)
 
     with open(filename, "rb") as f:
-        print("apparently open")
         return pickle.load(f)
 
 
