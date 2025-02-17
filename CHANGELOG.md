@@ -1,6 +1,40 @@
 # CHANGELOG
 
 
+## v0.2.0 (2025-02-17)
+
+### Bug Fixes
+
+- Barebones
+  ([`7e809e2`](https://github.com/edalfon/stepit/commit/7e809e255586bc263afda93044e3b83993c8185e))
+
+- Check symlink explicitly
+  ([`ba32c58`](https://github.com/edalfon/stepit/commit/ba32c58970c40448ee5f2aee20b0a2bba91ac150))
+
+- Closer look
+  ([`456695d`](https://github.com/edalfon/stepit/commit/456695d98401b977e5a6b4f3eeade73c2903ff89))
+
+- Do not create symlink, just copy the file
+  ([`b22095c`](https://github.com/edalfon/stepit/commit/b22095c9826a500698544479c68f7446b2277d33))
+
+- Just print it, 'cause logger level debug has already too much info
+  ([`ac971f0`](https://github.com/edalfon/stepit/commit/ac971f01de2858d4ba5ce138ab9c90d9022f413e))
+
+- Minimum tests
+  ([`cf577ea`](https://github.com/edalfon/stepit/commit/cf577eaeffc081f591d785d01c0d8837b7a1f923))
+
+- Retore tests and in default deserialize, consider there might be symlinks
+  ([`10976a8`](https://github.com/edalfon/stepit/commit/10976a856c50a8217a623670127381c748e1cb92))
+
+- Use os.readlink, when it is a symlink
+  ([`d344f87`](https://github.com/edalfon/stepit/commit/d344f8799333fe1fbf145f7ed68386cadac061b6))
+
+### Features
+
+- Add debug info before reading file
+  ([`9f32f53`](https://github.com/edalfon/stepit/commit/9f32f5336cf8d037a3e53e9e8fb11c6fc5594f70))
+
+
 ## v0.1.5 (2025-02-17)
 
 ### Bug Fixes
