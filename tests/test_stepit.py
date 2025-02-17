@@ -309,3 +309,4 @@ def test_formatters():
     assert format_time(60 * 4) == "4 minutes"
     assert format_time(60 * 60) == "1 hours"
     assert format_time(60 * 60 * 24) == "1 days"
+    
