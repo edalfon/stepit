@@ -3,10 +3,10 @@ import hashlib
 import inspect
 import logging
 import os
+import pathlib
 import pickle
 import shutil
 import time
-import pathlib
 
 # Set up logging
 logger = logging.getLogger("stepit")
@@ -39,6 +39,7 @@ def default_serialize(result, filename):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "wb") as f:
         pickle.dump(result, f)
+
 
 def default_deserialize(filename):
     """Deserialize using pickle, considering that the file might be a symlink."""
@@ -212,8 +213,10 @@ def stepit(
                     logger.info(
                         f"♻️  stepit '{config['key']}': is up-to-date. "
                         f"Using cached result for "
-                        f"`{func.__module__}.{func.__qualname__}()`"
+                        f"`{func.__module__}.{func.__qualname__}()` "
+                        f"{time.strftime('%Y-%m-%d %H:%M:%S')}"
                     )
+
                     create_symlink(key_file, cache_file)
                     return current["deserialize"](cache_file)
                 except Exception as e:
@@ -226,7 +229,8 @@ def stepit(
 
             logger.info(
                 f"⏩ stepit '{config['key']}': Starting execution of "
-                f"`{func.__module__}.{func.__qualname__}()`"  # ▶
+                f"`{func.__module__}.{func.__qualname__}()` "  # ▶
+                f"{time.strftime('%Y-%m-%d %H:%M:%S')}"
             )
             start_time = time.time()
             result = func(*args, **kwargs)
@@ -246,8 +250,9 @@ def stepit(
                 logger.info(
                     f"✅ stepit '{config['key']}': Successfully completed and cached "
                     f"[exec time {formatted_exec_time}, "
-                    f"cache time {formatted_persist_time}, size {formatted_size}]"
-                    f" `{func.__module__}.{func.__qualname__}()`"
+                    f"cache time {formatted_persist_time}, size {formatted_size}] "
+                    f"`{func.__module__}.{func.__qualname__}()` "
+                    f"{time.strftime('%Y-%m-%d %H:%M:%S')}"
                 )
 
             except Exception as e:
