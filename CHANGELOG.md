@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.4.0 (2025-02-24)
+
+### Features
+
+- Add timestamp to log messages (info level)
+  ([`6198622`](https://github.com/edalfon/stepit/commit/6198622163368e590c2a5fd41c2de0da9a355e02))
+
+
 ## v0.3.1 (2025-02-17)
 
 ### Bug Fixes
