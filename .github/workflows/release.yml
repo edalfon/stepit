@@ -36,8 +36,9 @@ jobs:
         
     - uses: astral-sh/setup-uv@v5
       with:
-      version: "0.5.14"
+        version: "0.5.14"
     - run: uv build
+
     - name: Commit uv.lock
       run: |
         git config --local user.email "actions@users.noreply.github.com"
