@@ -204,23 +204,12 @@ def stepit(
         def wrapper(*args, **kwargs):
             args_hash = _compute_args_hash(func, args, kwargs)
             source_hash = _compute_source_hash(func)
-            composite = f"{source_hash}:{args_hash}"
-            filename_hash = hashlib.md5(composite.encode("utf-8")).hexdigest()
 
             current = wrapper.__stepit_config__
             cache_file = os.path.join(
-                current["cache_dir"],
-                f"{current['key']}_{filename_hash}_{time.strftime('%Y%m%d%H%M%S')}",
-            )
-            cache_file = os.path.join(
-                current["cache_dir"],
-                f"{current['key']}_{filename_hash}",
+                current["cache_dir"], f"{current['key']}_{source_hash}_{args_hash}"
             )
             key_file = os.path.join(current["cache_dir"], f"{current['key']}")
-
-            # matching_files = glob.glob(f"{prefix}*")
-
-            #     if os.path.commonprefix([os.path.abspath(path), os.path.abspath(prefix)]) == os.path.abspath(prefix):
 
             if os.path.exists(cache_file):
                 try:
@@ -233,6 +222,7 @@ def stepit(
 
                     create_symlink(key_file, cache_file)
                     return current["deserialize"](cache_file)
+
                 except Exception as e:
                     logger.warning(
                         f"⚠️ stepit '{config['key']}': Could not load cache. "
