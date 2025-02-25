@@ -101,10 +101,10 @@ def format_time(seconds):
 
 
 def _compute_args_hash(func, args, kwargs):
-    sorted_kwargs = tuple(sorted(kwargs.items()))
-    logger.debug(f"Computing hash for args: {args}, kwargs: {sorted_kwargs}")
+    logger.debug(f"Computing hash for args passed to fn: {func.__qualname__}")
+    logger.debug(f"Hash for args: {args}, kwargs: {kwargs}")
     try:
-        pickled_args = pickle.dumps((args, sorted_kwargs))
+        pickled_args = pickle.dumps((args, kwargs))
     except Exception:
         pickled_args = func.__qualname__
         logger.warning(f"Cannot pickle args for {func.__qualname__}")
