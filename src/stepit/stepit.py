@@ -100,7 +100,19 @@ def format_time(seconds):
         seconds /= threshold  # Convert to the next unit
 
 
-def _compute_recursive_hash(func, seen=None):
+def _compute_args_hash(func, args, kwargs):
+    sorted_kwargs = tuple(sorted(kwargs.items()))
+    try:
+        pickled_args = pickle.dumps((args, sorted_kwargs))
+    except Exception:
+        pickled_args = func.__qualname__
+        logger.warning(f"Cannot pickle args for {func.__qualname__}")
+
+    args_hash = hashlib.md5(pickled_args).hexdigest()
+    return args_hash
+
+
+def _compute_source_hash(func, seen=None):
     """Computes a hash of the function's source code and, recursively,
     all stepit-decorated functions it calls."""
 
@@ -128,7 +140,7 @@ def _compute_recursive_hash(func, seen=None):
 
         for name, value in {**fnclvrs.nonlocals, **fnclvrs.globals}.items():
             if callable(value) and hasattr(value, "__stepit__"):
-                source += _compute_recursive_hash(value, seen)
+                source += _compute_source_hash(value, seen)
 
     except Exception as e:
         logger.warning(f"Couldn't get closurevars: {func.__qualname__}, {e}")
@@ -190,15 +202,8 @@ def stepit(
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            sorted_kwargs = tuple(sorted(kwargs.items()))
-            try:
-                pickled_args = pickle.dumps((args, sorted_kwargs))
-            except Exception:
-                pickled_args = func.__qualname__
-                logger.warning(f"Cannot pickle args for {func.__qualname__}")
-
-            args_hash = hashlib.md5(pickled_args).hexdigest()
-            source_hash = _compute_recursive_hash(func)
+            args_hash = _compute_args_hash(func, args, kwargs)
+            source_hash = _compute_source_hash(func)
             composite = f"{source_hash}:{args_hash}"
             filename_hash = hashlib.md5(composite.encode("utf-8")).hexdigest()
 
