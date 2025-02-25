@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.5.2 (2025-02-25)
+
+### Bug Fixes
+
+- Add debug level messages for hash
+  ([`29d5dbd`](https://github.com/edalfon/stepit/commit/29d5dbdbd552de3e51d704294d1e6e40d1d4ad9e))
+
+
 ## v0.5.1 (2025-02-25)
 
 ### Bug Fixes
