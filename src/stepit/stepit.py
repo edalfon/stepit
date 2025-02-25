@@ -3,9 +3,7 @@ import hashlib
 import inspect
 import logging
 import os
-import pathlib
 import pickle
-import shutil
 import time
 
 # Set up logging
@@ -42,12 +40,17 @@ def default_serialize(result, filename):
 
 
 def default_deserialize(filename):
-    """Deserialize using pickle, considering that the file might be a symlink."""
-    if pathlib.Path(filename).is_symlink():
-        filename = os.readlink(filename)
+    """Deserialize using pickle."""
 
-    with open(filename, "rb") as f:
-        return pickle.load(f)
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except Exception:
+        with open(filename, "r") as f:
+            real_file = f.readline().strip()
+            filename = real_file
+        with open(filename, "rb") as f:
+            return pickle.load(f)
 
 
 def format_size(size):
@@ -97,7 +100,19 @@ def format_time(seconds):
         seconds /= threshold  # Convert to the next unit
 
 
-def _compute_recursive_hash(func, seen=None):
+def _compute_args_hash(func, args, kwargs):
+    sorted_kwargs = tuple(sorted(kwargs.items()))
+    try:
+        pickled_args = pickle.dumps((args, sorted_kwargs))
+    except Exception:
+        pickled_args = func.__qualname__
+        logger.warning(f"Cannot pickle args for {func.__qualname__}")
+
+    args_hash = hashlib.md5(pickled_args).hexdigest()
+    return args_hash
+
+
+def _compute_source_hash(func, seen=None):
     """Computes a hash of the function's source code and, recursively,
     all stepit-decorated functions it calls."""
 
@@ -125,7 +140,7 @@ def _compute_recursive_hash(func, seen=None):
 
         for name, value in {**fnclvrs.nonlocals, **fnclvrs.globals}.items():
             if callable(value) and hasattr(value, "__stepit__"):
-                source += _compute_recursive_hash(value, seen)
+                source += _compute_source_hash(value, seen)
 
     except Exception as e:
         logger.warning(f"Couldn't get closurevars: {func.__qualname__}, {e}")
@@ -134,15 +149,12 @@ def _compute_recursive_hash(func, seen=None):
 
 
 def create_symlink(symlink_path, target_file):
-    """Creates a symbolic link, handling cross-platform differences."""
+    """Creates a plain text file containing the target file's path."""
     try:
-        if os.path.exists(symlink_path) or os.path.islink(symlink_path):
-            os.remove(symlink_path)  # Remove old symlink if it exists
-
-        os.symlink(target_file, symlink_path)  # Create new symlink
-
-    except OSError:
-        shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
+        with open(symlink_path, "w") as f:
+            f.write(target_file)
+    except OSError as e:
+        logger.error(f"Failed to create text file: {e}")
 
 
 def stepit(
@@ -190,21 +202,12 @@ def stepit(
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            sorted_kwargs = tuple(sorted(kwargs.items()))
-            try:
-                pickled_args = pickle.dumps((args, sorted_kwargs))
-            except Exception:
-                pickled_args = func.__qualname__
-                logger.warning(f"Cannot pickle args for {func.__qualname__}")
-
-            args_hash = hashlib.md5(pickled_args).hexdigest()
-            source_hash = _compute_recursive_hash(func)
-            composite = f"{source_hash}:{args_hash}"
-            filename_hash = hashlib.md5(composite.encode("utf-8")).hexdigest()
+            args_hash = _compute_args_hash(func, args, kwargs)
+            source_hash = _compute_source_hash(func)
 
             current = wrapper.__stepit_config__
             cache_file = os.path.join(
-                current["cache_dir"], f"{current['key']}_{filename_hash}"
+                current["cache_dir"], f"{current['key']}_{source_hash}_{args_hash}"
             )
             key_file = os.path.join(current["cache_dir"], f"{current['key']}")
 
@@ -219,6 +222,7 @@ def stepit(
 
                     create_symlink(key_file, cache_file)
                     return current["deserialize"](cache_file)
+
                 except Exception as e:
                     logger.warning(
                         f"⚠️ stepit '{config['key']}': Could not load cache. "

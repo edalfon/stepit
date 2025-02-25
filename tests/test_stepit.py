@@ -26,19 +26,23 @@ def test_stepit_defaults(caplog: pytest.LogCaptureFixture):
     start_time = time.time()
     a(5)
     elapsed_time = time.time() - start_time
-    assert "Starting execution" in caplog.text
-    assert "Successfully completed and cached" in caplog.text
-    assert elapsed_time >= 5
-    assert default_deserialize(f"{cache_dir}/a") == 7
+    assert "Starting execution" in caplog.text, "fail logging starting execution"
+    assert "Successfully completed and cached" in caplog.text, "fail logging success"
+    assert elapsed_time >= 5, "did not wait"
+    assert default_deserialize(f"{cache_dir}/a") == 7, "could not read current"
     caplog.clear()
 
     start_time = time.time()
     a(5)
     elapsed_time = time.time() - start_time
-    assert "is up-to-date. Using cached result" in caplog.text
-    assert "Starting execution" not in caplog.text
-    assert "Successfully completed and cached" not in caplog.text
-    assert elapsed_time < 2
+    assert "is up-to-date. Using cached result" in caplog.text, (
+        "failed logging use cache"
+    )
+    assert "Starting execution" not in caplog.text, "should not log start"
+    assert "Successfully completed and cached" not in caplog.text, (
+        "should not log success"
+    )
+    assert elapsed_time < 2, "should be fast"
 
 
 def test_stepit_change_source(caplog: pytest.LogCaptureFixture):
@@ -309,4 +313,3 @@ def test_formatters():
     assert format_time(60 * 4) == "4 minutes"
     assert format_time(60 * 60) == "1 hours"
     assert format_time(60 * 60 * 24) == "1 days"
-    

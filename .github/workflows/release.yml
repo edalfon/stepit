@@ -36,8 +36,15 @@ jobs:
         
     - uses: astral-sh/setup-uv@v5
       with:
-        version: "0.5.14"
+      version: "0.5.14"
     - run: uv build
+    - name: Commit uv.lock
+      run: |
+        git config --local user.email "actions@users.noreply.github.com"
+        git config --local user.name "github-actions"
+        git add uv.lock
+        git commit -m "chore: Update uv.lock" || echo "No changes to commit"
+        git push
   
     # https://github.com/pypa/gh-action-pypi-publish
     - name: Publish package distributions to PyPI
