@@ -102,6 +102,7 @@ def format_time(seconds):
 
 def _compute_args_hash(func, args, kwargs):
     sorted_kwargs = tuple(sorted(kwargs.items()))
+    logger.debug(f"Computing hash for args: {args}, kwargs: {sorted_kwargs}")
     try:
         pickled_args = pickle.dumps((args, sorted_kwargs))
     except Exception:
@@ -109,6 +110,7 @@ def _compute_args_hash(func, args, kwargs):
         logger.warning(f"Cannot pickle args for {func.__qualname__}")
 
     args_hash = hashlib.md5(pickled_args).hexdigest()
+    logger.debug(f"Resulting hash for args: {args_hash}")
     return args_hash
 
 
@@ -145,7 +147,9 @@ def _compute_source_hash(func, seen=None):
     except Exception as e:
         logger.warning(f"Couldn't get closurevars: {func.__qualname__}, {e}")
 
-    return hashlib.md5(source.encode("utf-8")).hexdigest()
+    source_hash = hashlib.md5(source.encode("utf-8")).hexdigest()
+    logger.debug(f"Final hash for function source: {source_hash}")
+    return source_hash
 
 
 def create_symlink(symlink_path, target_file):
