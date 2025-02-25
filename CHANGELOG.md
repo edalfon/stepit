@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.5.3 (2025-02-25)
+
+### Bug Fixes
+
+- Do not sort kwargs
+  ([`545e452`](https://github.com/edalfon/stepit/commit/545e452ff33e6184d8f2734fabdd5e538697ea33))
+
+
 ## v0.5.2 (2025-02-25)
 
 ### Bug Fixes
