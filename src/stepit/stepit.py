@@ -3,9 +3,7 @@ import hashlib
 import inspect
 import logging
 import os
-import pathlib
 import pickle
-import shutil
 import time
 
 # Set up logging
@@ -42,12 +40,17 @@ def default_serialize(result, filename):
 
 
 def default_deserialize(filename):
-    """Deserialize using pickle, considering that the file might be a symlink."""
-    if pathlib.Path(filename).is_symlink():
-        filename = os.readlink(filename)
+    """Deserialize using pickle."""
 
-    with open(filename, "rb") as f:
-        return pickle.load(f)
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except Exception:
+        with open(filename, "r") as f:
+            real_file = f.readline().strip()
+            filename = real_file
+        with open(filename, "rb") as f:
+            return pickle.load(f)
 
 
 def format_size(size):
@@ -134,15 +137,12 @@ def _compute_recursive_hash(func, seen=None):
 
 
 def create_symlink(symlink_path, target_file):
-    """Creates a symbolic link, handling cross-platform differences."""
+    """Creates a plain text file containing the target file's path."""
     try:
-        if os.path.exists(symlink_path) or os.path.islink(symlink_path):
-            os.remove(symlink_path)  # Remove old symlink if it exists
-
-        os.symlink(target_file, symlink_path)  # Create new symlink
-
-    except OSError:
-        shutil.copy2(target_file, symlink_path)  # Fallback: Copy the file
+        with open(symlink_path, "w") as f:
+            f.write(target_file)
+    except OSError as e:
+        logger.error(f"Failed to create text file: {e}")
 
 
 def stepit(
@@ -204,9 +204,18 @@ def stepit(
 
             current = wrapper.__stepit_config__
             cache_file = os.path.join(
-                current["cache_dir"], f"{current['key']}_{filename_hash}"
+                current["cache_dir"],
+                f"{current['key']}_{filename_hash}_{time.strftime('%Y%m%d%H%M%S')}",
+            )
+            cache_file = os.path.join(
+                current["cache_dir"],
+                f"{current['key']}_{filename_hash}",
             )
             key_file = os.path.join(current["cache_dir"], f"{current['key']}")
+
+            # matching_files = glob.glob(f"{prefix}*")
+
+            #     if os.path.commonprefix([os.path.abspath(path), os.path.abspath(prefix)]) == os.path.abspath(prefix):
 
             if os.path.exists(cache_file):
                 try:
