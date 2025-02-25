@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.5.1 (2025-02-25)
+
+### Bug Fixes
+
+- Update uv.lock
+  ([`b70e3c2`](https://github.com/edalfon/stepit/commit/b70e3c20bf4d07fd874ff320741f6b1423265cba))
+
+### Build System
+
+- --set-upstream origin in release-yml
+  ([`ac4bc90`](https://github.com/edalfon/stepit/commit/ac4bc900bfddd5bcf526e79cf1ff193df6ac0d4d))
+
+
 ## v0.5.0 (2025-02-25)
 
 ### Bug Fixes
