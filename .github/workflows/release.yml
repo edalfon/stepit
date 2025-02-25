@@ -38,6 +38,7 @@ jobs:
       with:
         version: "0.5.14"
     - run: uv build
+    - run: uv sync
 
     - name: Commit uv.lock
       run: |
