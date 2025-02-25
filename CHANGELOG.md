@@ -1,6 +1,37 @@
 # CHANGELOG
 
 
+## v0.5.0 (2025-02-25)
+
+### Bug Fixes
+
+- Don't use composite hash but both args and source hash
+  ([`c286d82`](https://github.com/edalfon/stepit/commit/c286d82d795c5f5236f338efa657ea88548f8867))
+
+### Build System
+
+- Fix release.yml
+  ([`ff6ae0b`](https://github.com/edalfon/stepit/commit/ff6ae0b090311e90e3db3c856df3bad9330a24a4))
+
+- Update uv.lock after semantic release, by commiting the updated file
+  ([`8dde9f8`](https://github.com/edalfon/stepit/commit/8dde9f88ceaa6fda5138469977726c5c52829412))
+
+### Features
+
+- Use it's own custom link to current cache file, instead of symlink
+  ([`575c4a1`](https://github.com/edalfon/stepit/commit/575c4a1630f8b04cc0a75e7d6a659ccb1b0fcc03))
+
+### Refactoring
+
+- Hash calculation fns
+  ([`b162872`](https://github.com/edalfon/stepit/commit/b1628724238e0aba91100bc5d6a1a74823d48bfa))
+
+### Testing
+
+- Add a few assert messages
+  ([`f064929`](https://github.com/edalfon/stepit/commit/f0649292d773bac8e9c12e1aa8053d16351c68f8))
+
+
 ## v0.4.0 (2025-02-24)
 
 ### Features
