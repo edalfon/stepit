@@ -1,6 +1,7 @@
 import functools
 import hashlib
 import inspect
+import json
 import logging
 import os
 import pickle
@@ -104,12 +105,16 @@ def _compute_args_hash(func, args, kwargs):
     logger.debug(f"Computing hash for args passed to fn: {func.__qualname__}")
     logger.debug(f"Hash for args: {args}, kwargs: {kwargs}")
     try:
-        pickled_args = pickle.dumps((args, kwargs))
+        args_dumps = json.dumps((args, kwargs), sort_keys=True, default=str)
     except Exception:
-        pickled_args = func.__qualname__
-        logger.warning(f"Cannot pickle args for {func.__qualname__}")
+        try:
+            logger.warning(f"Cannot json.dump() args for {func.__qualname__}")
+            args_dumps = pickle.dumps((args, kwargs))
+        except Exception:
+            args_dumps = func.__qualname__
+            logger.warning(f"Cannot pickle args for {func.__qualname__}")
 
-    args_hash = hashlib.md5(pickled_args).hexdigest()
+    args_hash = hashlib.md5(args_dumps.encode("utf-8")).hexdigest()
     logger.debug(f"Resulting hash for args: {args_hash}")
     return args_hash
 
