@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.5.4 (2025-02-26)
+
+### Bug Fixes
+
+- Try hashing args first via json dump
+  ([`ff396f8`](https://github.com/edalfon/stepit/commit/ff396f8520ac7d3c9e0ed04c1d05159d5e88070e))
+
+
 ## v0.5.3 (2025-02-25)
 
 ### Bug Fixes
